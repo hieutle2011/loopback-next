@@ -1,4 +1,4 @@
-// Copyright IBM Corp. 2019. All Rights Reserved.
+// Copyright IBM Corp. 2019,2020. All Rights Reserved.
 // Node module: @loopback/boot
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
@@ -7,7 +7,7 @@ import {Application, bind, BindingKey, ContextTags} from '@loopback/core';
 import {expect} from '@loopback/testlab';
 import {BootBindings, Booter, BootMixin} from '../../..';
 
-describe('BootMxiin unit tests', () => {
+describe('BootMixin unit tests', () => {
   let app: AppWithBootMixin;
 
   beforeEach(getApp);
