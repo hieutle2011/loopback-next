@@ -45,3 +45,15 @@ See
 ## License
 
 MIT
+
+---
+
+- ORM should be implemented as extensions - Juggler, TypeORM, Sequelize etc.
+- have to install typeorm and @loopback/typeorm
+- config db
+- need a CLI for generating TypeORM config artifacts
+  - entities instead of models
+  - connections instead of datasources
+- don't need RepositoryMixin
+  - but need migrateSchema
+    - implement migrateSchema as a binding - update migrate.js

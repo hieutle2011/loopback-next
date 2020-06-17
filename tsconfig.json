@@ -104,6 +104,9 @@
       "path": "extensions/metrics/tsconfig.json"
     },
     {
+      "path": "extensions/typeorm/tsconfig.json"
+    },
+    {
       "path": "fixtures/mock-oauth2-provider/tsconfig.json"
     },
     {
@@ -177,6 +180,9 @@
     },
     {
       "path": "packages/tsdocs/tsconfig.json"
+    },
+    {
+      "path": "sandbox/appa/tsconfig.json"
     }
   ],
   "files": []

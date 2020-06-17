@@ -12,7 +12,7 @@ import {TypeOrmComponent} from './typeorm.component';
  */
 export namespace TypeOrmBindings {
   export const COMPONENT = BindingKey.create<TypeOrmComponent>(
-    'components. TypeOrmComponent',
+    'components.TypeOrmComponent',
   );
 
   export const CONNECTION_MANAGER = BindingKey.create<TypeOrmConnectionManager>(
