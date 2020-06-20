@@ -28,6 +28,7 @@
     "@loopback/model-api-builder": "^2.1.9",
     "@loopback/repository": "^2.9.0",
     "@loopback/service-proxy": "^2.3.4",
+    "@loopback/typeorm": "^0.0.1",
     "@types/debug": "^4.1.5",
     "@types/glob": "^7.1.2",
     "debug": "^4.1.1",

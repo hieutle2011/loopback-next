@@ -4,11 +4,11 @@
 // License text available at https://opensource.org/licenses/MIT
 
 import {
-  BindingScope,
-  inject,
   Application,
+  BindingScope,
   Component,
   CoreBindings,
+  inject,
 } from '@loopback/core';
 import {
   ApplicationMetadataBooter,
@@ -20,6 +20,7 @@ import {
   ModelBooter,
   RepositoryBooter,
   ServiceBooter,
+  TypeOrmConnectionBooter,
 } from './booters';
 import {Bootstrapper} from './bootstrapper';
 import {BootBindings} from './keys';
@@ -42,6 +43,7 @@ export class BootComponent implements Component {
     InterceptorProviderBooter,
     ModelApiBooter,
     ModelBooter,
+    TypeOrmConnectionBooter,
   ];
 
   /**
