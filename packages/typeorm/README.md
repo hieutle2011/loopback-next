@@ -12,22 +12,39 @@ This module enables TypeORM support in LoopBack.
 npm install --save @loopback/typeorm
 ```
 
-## Basic use
+## Usage
 
 ### Enabling TypeORM support
 
-Load the TypeORM package in the app.
+Enabling TypeORM support requires the use of the `TypeOrmMixin` mixin and the
+`TypeOrmComponent` component. Import them from `@loopback/typeorm` and configure
+your app as shown below.
 
 ```ts
+import {TypeOrmComponent, TypeOrmMixin} from '@loopback/typeorm';
+...
+export class AppaApplication extends BootMixin(
+  ServiceMixin(TypeOrmMixin(RestApplication)),
+) {
+  constructor(options: ApplicationConfig = {}) {
+    super(options);
+    ...
+    this.component(TypeOrmComponent);
+    ...
+  }
+}
+
 ```
 
-### Defining Entities
+### Creating Entities
 
-Define the TypeORM entities as usual in files with the `.entity.ts` extension
-and keep them in the `models` directory of the project.
+[Entities](https://typeorm.io/#/entities) are equivalent to Juggler's Models.
+Define the entities as usual and keep them in a directory named `entities`, or
+even `models` or any name, just make sure to load them correctly in the
+connections.
 
 ```ts
-// src/models/photo.entity.ts
+// src/entities/book.entity.ts
 import {Entity, Column, PrimaryColumn} from 'typeorm';
 @Entity()
 export class Photo {
@@ -35,34 +52,24 @@ export class Photo {
   id: number;
 
   @Column()
-  name: string;
-
-  @Column()
-  description: string;
-
-  @Column()
-  filename: string;
-
-  @Column()
-  views: number;
+  title: string;
 
   @Column()
   isPublished: boolean;
 }
 ```
 
-### Defining a Connection
+### Creating Connections
 
-Connections are the equivalent of Juggler datasources. They contain the options
-and connectivity details of the databases.
-
-The repository module provides APIs to define LoopBack 3.x data sources and
-models. For example,
+[Connections](https://typeorm.io/#/connection) are equivalent to Juggler
+datasources. They contain the connectivity and other details about the
+databases. Define the connection in files with a `.connection.ts` extension and
+keep them in the `connections` directory of the project.
 
 ```ts
 // src/connections/sqlite.connection.ts
 import path from 'path';
-import {SqliteConnectionOptions} from 'typeorm/driver/sqlite/SqliteConnectionOptions';
+import {SqliteConnectionOptions} from '@loopback/typeorm';
 import {Book} from '../entities/';
 
 export const SQLLITE_CONNECTION: SqliteConnectionOptions = {
@@ -73,58 +80,51 @@ export const SQLLITE_CONNECTION: SqliteConnectionOptions = {
 };
 ```
 
-### Defining a controller
+Make sure to install the underlying database driver. For example, if you are
+using SQlite, you'll need to install `sqlite3`.
 
-Controllers serve as handlers for API requests. We declare controllers as
-classes with optional dependency injection by decorating constructor parameters
-or properties.
+```sh
+npm install sqlite3
+```
+
+Refer to the
+[TypeORM documentation](https://github.com/typeorm/typeorm#installation) for the
+supported databases and the underlying drivers.
+
+### Creating controllers
+
+Controllers continue to work as usual. And you don't have to create repositories
+since TypeORM creates them for you; just inject them in the controllers. The
+respository API is 100% TypeORM
+[respository API](https://typeorm.io/#/repository-api).
 
 ```ts
-TODO: update this after implementation
-// src/controllers/note.controller.ts
-import {repository} from '@loopback/repository';
-import {Note} from '../models';
-import {post, requestBody, get, param} from '@loopback/rest';
-import {inject} from '@loopback/core';
+// src/controllers/book.controller.ts
+import {get, post, Request, requestBody} from '@loopback/rest';
+import {getModelSchemaRef, Repository, typeorm} from '@loopback/typeorm';
+import {Book} from '../entities';
 
-export class NoteController {
+export class BookController {
+  @typeorm.repository(Book) private bookRepo: Repository<Book>;
+
   constructor() {}
 
-  @inject(RestBindings.Http.REQUEST) protected req: Request;
-  @typeorm.repository(Book) private noteRepo: Repository<Book>;
-
-  // Create a new note
-  @post('/note')
-  create(@requestBody() data: Note) {
-    const note = new Note(note);
-    return this.noteRepo.save(note);
+  // Create a new book
+  @post('/book')
+  async create(@requestBody() data: Book) {
+    const book = new Book();
+    book.title = data.title;
+    book.published = false;
+    return await this.bookRepo.save(book);
   }
 
-  // Find notes by title
+  // Find book by title
   @get('/note/{title}')
-  findByTitle(@param.path.string('title') title: string) {
-    return this.noteRepo.find({title});
+  async findByTitle(@param.path.string('title') title: string) {
+    return await this.bookRepo.find({title});
   }
 }
 ```
-
-- ORM should be implemented as extensions - Juggler, TypeORM, Sequelize etc.
-- have to install typeorm and @loopback/typeorm
-- config db
-- need a CLI for generating TypeORM config artifacts
-  - entities instead of models
-  - connections instead of datasources
-- don't need RepositoryMixin
-  - but need migrateSchema
-    - implement migrateSchema as a binding - update migrate.js
-- param.path, requestBody - usable
-- LB4 model-specific decorators
-  - param.where, param.filter has to be developed from scratch
-- need to write booters
-- dont't need repositories as they are alreday provided by TypeORM
-- users need to install corresponding packages else:
-  - DriverPackageNotInstalledError: SQLite package has not been found installed.
-    Try to install it: npm install sqlite3 --save
 
 ## Contributions
 
