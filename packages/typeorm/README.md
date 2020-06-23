@@ -95,8 +95,8 @@ supported databases and the underlying drivers.
 
 Controllers continue to work as usual. And you don't have to create repositories
 since TypeORM creates them for you; just inject them in the controllers. The
-respository API is 100% TypeORM
-[respository API](https://typeorm.io/#/repository-api).
+repository API is 100% TypeORM
+[repository API](https://typeorm.io/#/repository-api).
 
 ```ts
 // src/controllers/book.controller.ts
