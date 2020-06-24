@@ -11,7 +11,7 @@ export namespace typeorm {
   export function connection(connectionName?: string) {
     return inject(
       '',
-      {decorator: '@typeormConnection'},
+      {decorator: '@typeorm.connection'},
       async (
         ctx: Context,
         injection: Readonly<Injection>,
@@ -28,7 +28,7 @@ export namespace typeorm {
   ) {
     return inject(
       '',
-      {decorator: '@typeormEntityManager'},
+      {decorator: '@typeorm.entityManager'},
       async (
         ctx: Context,
         injection: Readonly<Injection>,
@@ -43,7 +43,7 @@ export namespace typeorm {
   export function repository(entity: Function, connectionName?: string) {
     return inject(
       '',
-      {decorator: '@typeormRepository'},
+      {decorator: '@typeorm.repository'},
       async (
         ctx: Context,
         injection: Readonly<Injection>,
