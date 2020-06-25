@@ -181,6 +181,9 @@
     {
       "path": "packages/typeorm/tsconfig.json"
     },
+    {
+      "path": "sandbox/appa/tsconfig.json"
+    }
   ],
   "files": []
 }

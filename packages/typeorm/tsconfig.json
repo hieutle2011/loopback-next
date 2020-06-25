@@ -14,6 +14,9 @@
       "path": "../core/tsconfig.json"
     },
     {
+      "path": "../openapi-v3/tsconfig.json"
+    },
+    {
       "path": "../rest/tsconfig.json"
     },
     {

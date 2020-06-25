@@ -1,6 +1,7 @@
 # @loopback/typeorm
 
-This module enables TypeORM support in LoopBack.
+This module enables TypeORM support in LoopBack. For pending features, refer to
+the "Pending" section.
 
 ## Overview
 
@@ -12,24 +13,21 @@ This module enables TypeORM support in LoopBack.
 npm install --save @loopback/typeorm
 ```
 
-## Usage
+## Basic Usage
 
 ### Enabling TypeORM support
 
-Enabling TypeORM support requires the use of the `TypeOrmMixin` mixin and the
-`TypeOrmComponent` component. Import them from `@loopback/typeorm` and configure
-your app as shown below.
+To enable TypeORM support, import `TypeOrmMixin` from `@loopback/typeorm` and
+apply it to your application class as shown below.
 
 ```ts
-import {TypeOrmComponent, TypeOrmMixin} from '@loopback/typeorm';
+import {TypeOrmMixin} from '@loopback/typeorm';
 ...
 export class AppaApplication extends BootMixin(
   ServiceMixin(TypeOrmMixin(RestApplication)),
 ) {
   constructor(options: ApplicationConfig = {}) {
     super(options);
-    ...
-    this.component(TypeOrmComponent);
     ...
   }
 }
@@ -69,10 +67,10 @@ keep them in the `connections` directory of the project.
 ```ts
 // src/connections/sqlite.connection.ts
 import path from 'path';
-import {SqliteConnectionOptions} from '@loopback/typeorm';
+import {ConnectionOptions} from '@loopback/typeorm';
 import {Book} from '../entities/';
 
-export const SQLLITE_CONNECTION: SqliteConnectionOptions = {
+export const SqliteConnection: ConnectionOptions = {
   type: 'sqlite',
   database: path.join(__dirname, 'sqlite-test-db'),
   entities: [Book],
@@ -101,7 +99,7 @@ repository API is 100% TypeORM
 ```ts
 // src/controllers/book.controller.ts
 import {get, post, Request, requestBody} from '@loopback/rest';
-import {getModelSchemaRef, Repository, typeorm} from '@loopback/typeorm';
+import {getModelSchema, Repository, typeorm} from '@loopback/typeorm';
 import {Book} from '../entities';
 
 export class BookController {
@@ -125,6 +123,16 @@ export class BookController {
   }
 }
 ```
+
+## Limitations
+
+The current implementation does not support the following:
+
+1. Database migration
+2. Custom repository
+3. Query filters
+4. Complete TypeORM to OpenAPI data type conversion (currently only `number`,
+   `string`, and `boolean` are supported)
 
 ## Contributions
 
