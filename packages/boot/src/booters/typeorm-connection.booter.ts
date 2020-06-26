@@ -4,7 +4,7 @@
 // License text available at https://opensource.org/licenses/MIT
 
 import {config, CoreBindings, inject} from '@loopback/core';
-import {ApplicationUsingTypeOrm} from '@loopback/typeorm';
+import {ApplicationUsingTypeOrm, ConnectionOptions} from '@loopback/typeorm';
 import debugFactory from 'debug';
 import {BootBindings} from '../keys';
 import {ArtifactOptions, booter} from '../types';
@@ -39,11 +39,10 @@ export class TypeOrmConnectionBooter extends BaseArtifactBooter {
 
   async load() {
     for (const file of this.discovered) {
-      const exported = require(file);
-      const connectionKey = Object.keys(exported)[0];
-      if (connectionKey) {
-        const options = exported[connectionKey];
-        this.app.typeormConnectionOptions.push(options);
+      const connections = require(file);
+      for (const k in connections) {
+        const connection: ConnectionOptions = connections[k];
+        this.app.typeormConnectionOptions.push(connection);
       }
     }
   }
