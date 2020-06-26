@@ -13,4 +13,6 @@ export namespace TypeOrmBindings {
   export const MANAGER = BindingKey.create<ConnectionManager>(
     'services.TypeOrmConnectionManager',
   );
+  export const PREFIX = 'connection';
+  export const TAG = 'typeOrmConnection';
 }

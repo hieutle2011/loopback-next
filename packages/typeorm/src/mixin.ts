@@ -26,7 +26,7 @@ export function TypeOrmMixin<T extends MixinTarget<Application>>(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(...args: any[]) {
       super(...args);
-      this.lifeCycleObserver(StartStop);
+      this.lifeCycleObserver(TypeOrmStartStop);
       this.connectionManager = new ConnectionManager();
       const binding = this.bind(TypeOrmBindings.MANAGER).to(
         this.connectionManager,
@@ -37,9 +37,9 @@ export function TypeOrmMixin<T extends MixinTarget<Application>>(
     connection(connectionConfig: ConnectionOptions) {
       const connection = this.connectionManager.create(connectionConfig);
       const name = connection.name;
-      const binding = this.bind(`connections.${name}`).toDynamicValue(() =>
-        this.connectionManager.get(name),
-      );
+      const binding = this.bind(`${TypeOrmBindings.PREFIX}.${name}`)
+        .toDynamicValue(() => this.connectionManager.get(name))
+        .tag(TypeOrmBindings.TAG);
       debug('Binding created for connection %s: %j', name, binding);
     }
 
@@ -58,7 +58,7 @@ export interface ApplicationUsingTypeOrm extends Application {
 @lifeCycleObserver('datasource', {
   scope: BindingScope.SINGLETON,
 })
-export class StartStop implements LifeCycleObserver {
+export class TypeOrmStartStop implements LifeCycleObserver {
   constructor(
     @inject(TypeOrmBindings.MANAGER)
     private manager: ConnectionManager,
