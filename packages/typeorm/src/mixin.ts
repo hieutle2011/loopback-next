@@ -51,7 +51,6 @@ export function TypeOrmMixin<T extends MixinTarget<Application>>(
 }
 
 export interface ApplicationUsingTypeOrm extends Application {
-  typeormConnectionOptions: ConnectionOptions[];
   connection(options: ConnectionOptions): void;
   migrateSchema(): Promise<void>;
 }

@@ -39,10 +39,17 @@ export class TypeOrmConnectionBooter extends BaseArtifactBooter {
 
   async load() {
     for (const file of this.discovered) {
-      const connections = require(file);
-      for (const k in connections) {
-        const connection: ConnectionOptions = connections[k];
-        this.app.connection(connection);
+      if (!this.app.connection) {
+        console.warn(
+          'app.connection() function is needed for TypeOrmConnectionBooter. You can add ' +
+            'it to your Application using TypeOrmMixin from @loopback/typeorm.',
+        );
+      } else {
+        const connections = require(file);
+        for (const k in connections) {
+          const connection: ConnectionOptions = connections[k];
+          this.app.connection(connection);
+        }
       }
     }
   }

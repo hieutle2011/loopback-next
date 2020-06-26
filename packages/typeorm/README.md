@@ -1,7 +1,7 @@
 # @loopback/typeorm
 
 This module enables TypeORM support in LoopBack. For pending features, refer to
-the "Pending" section.
+the [Limitations](#limitations) section below.
 
 ## Overview
 
@@ -13,7 +13,7 @@ the "Pending" section.
 npm install --save @loopback/typeorm
 ```
 
-## Basic Usage
+## Basic Use
 
 ### Enabling TypeORM support
 
@@ -23,7 +23,7 @@ apply it to your application class as shown below.
 ```ts
 import {TypeOrmMixin} from '@loopback/typeorm';
 ...
-export class AppaApplication extends BootMixin(
+export class MyApplication extends BootMixin(
   ServiceMixin(TypeOrmMixin(RestApplication)),
 ) {
   constructor(options: ApplicationConfig = {}) {
