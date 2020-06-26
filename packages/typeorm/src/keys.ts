@@ -4,6 +4,7 @@
 // License text available at https://opensource.org/licenses/MIT
 
 import {BindingKey} from '@loopback/core';
+import {ConnectionManager} from 'typeorm';
 import {TypeOrmConnections} from './services';
 import {TypeOrmComponent} from './typeorm.component';
 
@@ -17,6 +18,10 @@ export namespace TypeOrmBindings {
 
   export const CONNECTIONS = BindingKey.create<TypeOrmConnections>(
     'services.TypeOrmConnections',
+  );
+
+  export const MANAGER = BindingKey.create<ConnectionManager>(
+    'services.TypeOrmConnectionManager',
   );
 }
 

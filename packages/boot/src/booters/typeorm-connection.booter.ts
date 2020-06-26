@@ -42,7 +42,7 @@ export class TypeOrmConnectionBooter extends BaseArtifactBooter {
       const connections = require(file);
       for (const k in connections) {
         const connection: ConnectionOptions = connections[k];
-        this.app.typeormConnectionOptions.push(connection);
+        this.app.connection(connection);
       }
     }
   }

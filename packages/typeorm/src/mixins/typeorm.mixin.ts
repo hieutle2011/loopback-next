@@ -6,6 +6,7 @@
 import {Application, MixinTarget} from '@loopback/core';
 import debugFactory from 'debug';
 import {ConnectionManager, ConnectionOptions} from 'typeorm';
+import {TypeOrmBindings} from '../keys';
 
 const debug = debugFactory('loopback:typeorm:mixin');
 
@@ -14,20 +15,24 @@ export function TypeOrmMixin<T extends MixinTarget<Application>>(
 ) {
   return class extends superClass {
     connectionManager: ConnectionManager;
-    typeormConnectionOptions: ConnectionOptions[] = [];
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(...args: any[]) {
       super(...args);
       this.connectionManager = new ConnectionManager();
+      const binding = this.bind(TypeOrmBindings.MANAGER).to(
+        this.connectionManager,
+      );
+      debug('Binding created for connection manager', binding);
     }
 
     connection(connectionConfig: ConnectionOptions) {
       const connection = this.connectionManager.create(connectionConfig);
       const name = connection.name;
-      this.bind(`connections.${name}`).toDynamicValue(() =>
+      const binding = this.bind(`connections.${name}`).toDynamicValue(() =>
         this.connectionManager.get(name),
       );
+      debug('Binding created for connection %s: %j', name, binding);
     }
 
     async migrateSchema(): Promise<void> {
@@ -38,5 +43,6 @@ export function TypeOrmMixin<T extends MixinTarget<Application>>(
 
 export interface ApplicationUsingTypeOrm extends Application {
   typeormConnectionOptions: ConnectionOptions[];
+  connection(options: ConnectionOptions): void;
   migrateSchema(): Promise<void>;
 }

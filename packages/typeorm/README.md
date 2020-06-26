@@ -64,9 +64,6 @@ datasources. They contain the connectivity and other details about the
 databases. Define the connection in files with a `.connection.ts` extension and
 keep them in the `connections` directory of the project.
 
-NOTE: A connection file should be associated with a single connection. Only the
-first connection will be used, if there are more than one connections.
-
 ```ts
 // src/connections/sqlite.connection.ts
 import path from 'path';
@@ -74,6 +71,7 @@ import {ConnectionOptions} from '@loopback/typeorm';
 import {Book} from '../entities/';
 
 export const SqliteConnection: ConnectionOptions = {
+  name: 'SQLite',
   type: 'sqlite',
   database: path.join(__dirname, 'sqlite-test-db'),
   entities: [Book],
