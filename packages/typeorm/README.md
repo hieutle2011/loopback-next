@@ -21,16 +21,10 @@ To enable TypeORM support, import `TypeOrmMixin` from `@loopback/typeorm` and
 apply it to your application class as shown below.
 
 ```ts
+import {RestApplication} from '@loopback/rest';
 import {TypeOrmMixin} from '@loopback/typeorm';
 ...
-export class MyApplication extends BootMixin(
-  ServiceMixin(TypeOrmMixin(RestApplication)),
-) {
-  constructor(options: ApplicationConfig = {}) {
-    super(options);
-    ...
-  }
-}
+TypeOrmMixin(RestApplication);
 ```
 
 ### Creating Entities
@@ -128,11 +122,16 @@ export class BookController {
 
 The current implementation does not support the following:
 
-1. Database migration
-2. Custom repository
-3. Query filters
-4. Complete TypeORM to OpenAPI data type conversion (currently only `number`,
+1. Complete TypeORM to OpenAPI data type conversion (currently only `number`,
    `string`, and `boolean` are supported)
+2. Full JSON/OpenAPI schema for models, including variants like with/without id,
+   with/without relations, partial, etc.
+3. Json/OpenAPI schema to describe the supported filter format
+4. Support for LoopBack-style filters
+5. Custom repository classes (e.g. to implement bookRepo.findByTitle(title)).
+6. Database migration
+
+We will be implementing them progressively in the follow up stories.
 
 ## Contributions
 
