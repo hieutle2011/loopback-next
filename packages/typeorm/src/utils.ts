@@ -34,8 +34,8 @@ export function getModelSchema<T extends object>(
   const allColumns: ColumnMetadataArgs[] = getMetadataArgsStorage().columns;
   const modelColumns = allColumns.filter(col => col.target === modelCtor);
 
-  const properties: propertyType = {};
-  for (let col of modelColumns) {
+  const properties: PropertyType = {};
+  for (const col of modelColumns) {
     // Skip @PrimaryGeneratedColumn
     if (!col.options.primary) {
       properties[col.propertyName] = {
@@ -57,7 +57,7 @@ export function getModelSchema<T extends object>(
   return schema;
 }
 
-export type propertyType = {
+export type PropertyType = {
   [propertyName: string]: SchemaObject | ReferenceObject;
 };
 

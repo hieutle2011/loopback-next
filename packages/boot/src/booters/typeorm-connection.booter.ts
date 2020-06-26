@@ -5,12 +5,9 @@
 
 import {config, CoreBindings, inject} from '@loopback/core';
 import {ApplicationUsingTypeOrm, ConnectionOptions} from '@loopback/typeorm';
-import debugFactory from 'debug';
 import {BootBindings} from '../keys';
 import {ArtifactOptions, booter} from '../types';
 import {BaseArtifactBooter} from './base-artifact.booter';
-
-const debug = debugFactory('loopback:boot:typeorm-connection-booter');
 
 /**
  * A class that extends BaseArtifactBooter to boot the TypeORM connection artifact type.

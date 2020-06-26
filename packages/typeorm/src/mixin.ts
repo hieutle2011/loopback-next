@@ -64,11 +64,11 @@ export class TypeOrmLifeCycleManager implements LifeCycleObserver {
     private manager: ConnectionManager,
   ) {}
 
-  async start() {
-    Promise.all(this.manager.connections.map(c => c.connect()));
+  async start(): Promise<void> {
+    await Promise.all(this.manager.connections.map(c => c.connect()));
   }
 
-  async stop() {
-    Promise.all(this.manager.connections.map(c => c.close()));
+  async stop(): Promise<void> {
+    await Promise.all(this.manager.connections.map(c => c.close()));
   }
 }
