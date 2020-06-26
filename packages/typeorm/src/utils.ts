@@ -8,11 +8,13 @@ import {
   ReferenceObject,
   SchemaObject,
 } from '@loopback/openapi-v3';
+import debugFactory from 'debug';
 import {getMetadataArgsStorage} from 'typeorm';
 import {ColumnType} from 'typeorm/driver/types/ColumnTypes';
 import {ColumnMetadataArgs} from 'typeorm/metadata-args/ColumnMetadataArgs';
+const debug = debugFactory('loopback:typeorm:mixin');
 
-const ModelSchemaCache = new WeakMap();
+const modelSchemaCache = new WeakMap();
 
 /**
  * Describe the provided Entity as a reference to a definition shared by multiple
@@ -25,39 +27,51 @@ export function getModelSchema<T extends object>(
   modelCtor: Function & {prototype: T},
   options?: JsonSchemaOptions<T>,
 ): SchemaObject {
-  const cached = ModelSchemaCache.get(modelCtor);
+  const cached = modelSchemaCache.get(modelCtor);
   if (cached) {
     return cached;
-  } else {
-    const allColumns: ColumnMetadataArgs[] = getMetadataArgsStorage().columns;
-    const modelColumns = allColumns.filter(col => col.target === modelCtor);
-
-    const properties: propertyType = {};
-    for (let col of modelColumns) {
-      // Skip @PrimaryGeneratedColumn
-      if (!col.options.primary) {
-        properties[col.propertyName] = {
-          type: getStringifiedType(col.options.type as ColumnType),
-        };
-      }
-    }
-
-    const schema: SchemaObject = {
-      title: modelCtor.name,
-      properties,
-    };
-
-    ModelSchemaCache.set(modelCtor, schema);
-    return schema;
   }
+  const allColumns: ColumnMetadataArgs[] = getMetadataArgsStorage().columns;
+  const modelColumns = allColumns.filter(col => col.target === modelCtor);
+
+  const properties: propertyType = {};
+  for (let col of modelColumns) {
+    // Skip @PrimaryGeneratedColumn
+    if (!col.options.primary) {
+      properties[col.propertyName] = {
+        type: getStringifiedType({
+          func: col.options.type as ColumnType,
+          entity: modelCtor.name,
+          property: col.propertyName,
+        }),
+      };
+    }
+  }
+
+  const schema: SchemaObject = {
+    title: modelCtor.name,
+    properties,
+  };
+
+  modelSchemaCache.set(modelCtor, schema);
+  return schema;
 }
 
 export type propertyType = {
   [propertyName: string]: SchemaObject | ReferenceObject;
 };
 
+export type StringifiedTypeOptions = {
+  func: ColumnType;
+  entity: string;
+  property: string;
+};
+
 // TODO: identify other data types
-function getStringifiedType(func: ColumnType): string {
+function getStringifiedType(
+  options: StringifiedTypeOptions,
+): string | undefined {
+  const {func, entity, property} = options;
   if (func === Number) {
     return 'number';
   } else if (func === String) {
@@ -65,8 +79,9 @@ function getStringifiedType(func: ColumnType): string {
   } else if (func === Boolean) {
     return 'boolean';
   } else {
-    throw new Error(
-      `Type conversion of ${func} to OpenAPI format not implemented.`,
+    debug(
+      `${entity}.${property}: Type conversion of ${func} to OpenAPI format not implemented.`,
     );
+    return undefined;
   }
 }

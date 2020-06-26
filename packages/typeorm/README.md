@@ -31,7 +31,6 @@ export class MyApplication extends BootMixin(
     ...
   }
 }
-
 ```
 
 ### Creating Entities

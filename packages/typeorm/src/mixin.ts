@@ -26,7 +26,7 @@ export function TypeOrmMixin<T extends MixinTarget<Application>>(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(...args: any[]) {
       super(...args);
-      this.lifeCycleObserver(TypeOrmStartStop);
+      this.lifeCycleObserver(TypeOrmLifeCycleManager);
       this.connectionManager = new ConnectionManager();
       const binding = this.bind(TypeOrmBindings.MANAGER).to(
         this.connectionManager,
@@ -58,7 +58,7 @@ export interface ApplicationUsingTypeOrm extends Application {
 @lifeCycleObserver('datasource', {
   scope: BindingScope.SINGLETON,
 })
-export class TypeOrmStartStop implements LifeCycleObserver {
+export class TypeOrmLifeCycleManager implements LifeCycleObserver {
   constructor(
     @inject(TypeOrmBindings.MANAGER)
     private manager: ConnectionManager,
