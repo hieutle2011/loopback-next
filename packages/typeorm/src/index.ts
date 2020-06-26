@@ -5,8 +5,6 @@
 
 export * from './decorators';
 export * from './keys';
-export * from './mixins';
-export * from './services';
-export * from './typeorm.component';
+export * from './mixin';
 export * from './types';
 export * from './utils';

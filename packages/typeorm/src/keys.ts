@@ -5,24 +5,12 @@
 
 import {BindingKey} from '@loopback/core';
 import {ConnectionManager} from 'typeorm';
-import {TypeOrmConnections} from './services';
-import {TypeOrmComponent} from './typeorm.component';
 
 /**
  * Binding keys used by this component.
  */
 export namespace TypeOrmBindings {
-  export const COMPONENT = BindingKey.create<TypeOrmComponent>(
-    'components.TypeOrmComponent',
-  );
-
-  export const CONNECTIONS = BindingKey.create<TypeOrmConnections>(
-    'services.TypeOrmConnections',
-  );
-
   export const MANAGER = BindingKey.create<ConnectionManager>(
     'services.TypeOrmConnectionManager',
   );
 }
-
-export const CONNECTION_OPTIONS_EXTENSION_POINT = 'typeorm.connectionOptions';

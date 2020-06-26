@@ -3,10 +3,17 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
-import {Application, MixinTarget} from '@loopback/core';
+import {
+  Application,
+  BindingScope,
+  inject,
+  lifeCycleObserver,
+  LifeCycleObserver,
+  MixinTarget,
+} from '@loopback/core';
 import debugFactory from 'debug';
 import {ConnectionManager, ConnectionOptions} from 'typeorm';
-import {TypeOrmBindings} from '../keys';
+import {TypeOrmBindings} from './keys';
 
 const debug = debugFactory('loopback:typeorm:mixin');
 
@@ -19,6 +26,7 @@ export function TypeOrmMixin<T extends MixinTarget<Application>>(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(...args: any[]) {
       super(...args);
+      this.lifeCycleObserver(StartStop);
       this.connectionManager = new ConnectionManager();
       const binding = this.bind(TypeOrmBindings.MANAGER).to(
         this.connectionManager,
@@ -37,6 +45,7 @@ export function TypeOrmMixin<T extends MixinTarget<Application>>(
 
     async migrateSchema(): Promise<void> {
       // TODO: implement using TypeORM
+      throw new Error('TypeORM migration not implemented.');
     }
   };
 }
@@ -45,4 +54,22 @@ export interface ApplicationUsingTypeOrm extends Application {
   typeormConnectionOptions: ConnectionOptions[];
   connection(options: ConnectionOptions): void;
   migrateSchema(): Promise<void>;
+}
+
+@lifeCycleObserver('datasource', {
+  scope: BindingScope.SINGLETON,
+})
+export class StartStop implements LifeCycleObserver {
+  constructor(
+    @inject(TypeOrmBindings.MANAGER)
+    private manager: ConnectionManager,
+  ) {}
+
+  async start() {
+    Promise.all(this.manager.connections.map(c => c.connect()));
+  }
+
+  async stop() {
+    Promise.all(this.manager.connections.map(c => c.close()));
+  }
 }

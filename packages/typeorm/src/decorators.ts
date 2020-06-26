@@ -5,7 +5,7 @@
 
 import {Context, inject, Injection, ResolutionSession} from '@loopback/core';
 import {QueryRunner} from 'typeorm';
-import {TypeOrmBindings} from '../keys';
+import {TypeOrmBindings} from './keys';
 
 export namespace typeorm {
   export function connection(connectionName?: string) {
@@ -62,6 +62,6 @@ export namespace typeorm {
  * @param connectionName - Optional connection name
  */
 async function getConnection(ctx: Context, connectionName?: string) {
-  const connections = await ctx.get(TypeOrmBindings.CONNECTIONS);
-  return connections.manager.get(connectionName);
+  const manager = await ctx.get(TypeOrmBindings.MANAGER);
+  return manager.get(connectionName);
 }
