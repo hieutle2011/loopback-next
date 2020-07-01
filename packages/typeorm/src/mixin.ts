@@ -34,10 +34,10 @@ export function TypeOrmMixin<T extends MixinTarget<Application>>(
       debug('Binding created for connection manager', binding);
     }
 
-    async connection(connectionConfig: ConnectionOptions) {
-      const connection = await this.connectionManager.create(connectionConfig);
+    connection(connectionConfig: ConnectionOptions) {
+      const connection = this.connectionManager.create(connectionConfig);
       const name = connection.name;
-      const binding = await this.bind(`${TypeOrmBindings.PREFIX}.${name}`)
+      const binding = this.bind(`${TypeOrmBindings.PREFIX}.${name}`)
         .toDynamicValue(() => this.connectionManager.get(name))
         .tag(TypeOrmBindings.TAG);
       this.add(binding);

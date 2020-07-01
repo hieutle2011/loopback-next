@@ -48,7 +48,7 @@ export class TypeOrmConnectionBooter extends BaseArtifactBooter {
         for (const k in connections) {
           const connection: ConnectionOptions = connections[k];
           debug('Bind class: %s', connection.name);
-          const binding = await this.app.connection(connection);
+          const binding = this.app.connection(connection);
           debug(
             'Binding created for connection %s: %j',
             connection.name,
