@@ -7,6 +7,7 @@ import {ApplicationConfig} from '@loopback/core';
 import {RepositoryMixin} from '@loopback/repository';
 import {RestApplication} from '@loopback/rest';
 import {ServiceMixin} from '@loopback/service-proxy';
+import {TypeOrmMixin} from '@loopback/typeorm';
 import {BootMixin} from '../..';
 
 // Force package.json to be copied to `dist` by `tsc`
@@ -14,7 +15,7 @@ import {BootMixin} from '../..';
 import * as pkg from './package.json';
 
 export class BooterApp extends BootMixin(
-  ServiceMixin(RepositoryMixin(RestApplication)),
+  ServiceMixin(RepositoryMixin(TypeOrmMixin(RestApplication))),
 ) {
   constructor(options?: ApplicationConfig) {
     super(options);

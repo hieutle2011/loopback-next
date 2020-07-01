@@ -34,13 +34,14 @@ export function TypeOrmMixin<T extends MixinTarget<Application>>(
       debug('Binding created for connection manager', binding);
     }
 
-    connection(connectionConfig: ConnectionOptions) {
-      const connection = this.connectionManager.create(connectionConfig);
+    async connection(connectionConfig: ConnectionOptions) {
+      const connection = await this.connectionManager.create(connectionConfig);
       const name = connection.name;
-      const binding = this.bind(`${TypeOrmBindings.PREFIX}.${name}`)
+      const binding = await this.bind(`${TypeOrmBindings.PREFIX}.${name}`)
         .toDynamicValue(() => this.connectionManager.get(name))
         .tag(TypeOrmBindings.TAG);
-      debug('Binding created for connection %s: %j', name, binding);
+      this.add(binding);
+      return binding;
     }
 
     async migrateSchema(): Promise<void> {

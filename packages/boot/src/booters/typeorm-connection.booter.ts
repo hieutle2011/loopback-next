@@ -5,9 +5,11 @@
 
 import {config, CoreBindings, inject} from '@loopback/core';
 import {ApplicationUsingTypeOrm, ConnectionOptions} from '@loopback/typeorm';
+import debugFactory from 'debug';
 import {BootBindings} from '../keys';
 import {ArtifactOptions, booter} from '../types';
 import {BaseArtifactBooter} from './base-artifact.booter';
+const debug = debugFactory('loopback:typeorm:mixin');
 
 /**
  * A class that extends BaseArtifactBooter to boot the TypeORM connection artifact type.
@@ -45,7 +47,13 @@ export class TypeOrmConnectionBooter extends BaseArtifactBooter {
         const connections = require(file);
         for (const k in connections) {
           const connection: ConnectionOptions = connections[k];
-          this.app.connection(connection);
+          debug('Bind class: %s', connection.name);
+          const binding = await this.app.connection(connection);
+          debug(
+            'Binding created for connection %s: %j',
+            connection.name,
+            binding,
+          );
         }
       }
     }
