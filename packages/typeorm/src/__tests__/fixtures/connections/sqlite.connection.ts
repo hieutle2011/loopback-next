@@ -3,10 +3,10 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
-import {ConnectionOptions} from '@loopback/typeorm';
+import {ConnectionOptions} from '../../../';
 
 export const SqliteConnection: ConnectionOptions = {
-  name: 'SQLite',
+  name: 'my-db',
   type: 'sqlite',
   database: 'test',
   entities: [],

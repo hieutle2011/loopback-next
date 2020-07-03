@@ -28,7 +28,6 @@
     "@loopback/model-api-builder": "^2.1.9",
     "@loopback/repository": "^2.9.0",
     "@loopback/service-proxy": "^2.3.4",
-    "@loopback/typeorm": "^0.0.1",
     "@types/debug": "^4.1.5",
     "@types/glob": "^7.1.2",
     "debug": "^4.1.1",
@@ -42,8 +41,7 @@
     "@loopback/rest": "^5.2.0",
     "@loopback/rest-crud": "^0.8.9",
     "@loopback/testlab": "^3.2.0",
-    "@types/node": "^10.17.26",
-    "sqlite3": "^4.2.0"
+    "@types/node": "^10.17.26"
   },
   "files": [
     "README.md",

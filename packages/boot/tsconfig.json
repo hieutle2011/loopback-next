@@ -34,9 +34,6 @@
     },
     {
       "path": "../testlab/tsconfig.json"
-    },
-    {
-      "path": "../typeorm/tsconfig.json"
     }
   ]
 }

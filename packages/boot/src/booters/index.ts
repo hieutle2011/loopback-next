@@ -15,4 +15,3 @@ export * from './model-api.booter';
 export * from './model.booter';
 export * from './repository.booter';
 export * from './service.booter';
-export * from './typeorm-connection.booter';

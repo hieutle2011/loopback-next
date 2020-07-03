@@ -5,13 +5,14 @@
 
 import {Application} from '@loopback/core';
 import {expect, sinon, TestSandbox} from '@loopback/testlab';
+import {resolve} from 'path';
 import {
   ApplicationUsingTypeOrm,
+  ConnectionDefaults,
   TypeOrmBindings,
+  TypeOrmConnectionBooter,
   TypeOrmMixin,
-} from '@loopback/typeorm';
-import {resolve} from 'path';
-import {ConnectionDefaults, TypeOrmConnectionBooter} from '../../..';
+} from '../../';
 
 describe('TypeORM connection booter unit tests', () => {
   const sandbox = new TestSandbox(resolve(__dirname, '../../../.sandbox'));
@@ -30,7 +31,7 @@ describe('TypeORM connection booter unit tests', () => {
   it('gives a warning if called on an app without TypeOrmMixin', async () => {
     const normalApp = new Application();
     await sandbox.copyFile(
-      resolve(__dirname, '../../fixtures/sqlite.connection.js'),
+      resolve(__dirname, '../fixtures/connections/sqlite.connection.js'),
     );
 
     const booterInst = new TypeOrmConnectionBooter(
@@ -68,9 +69,9 @@ describe('TypeORM connection booter unit tests', () => {
   });
 
   it('binds connections during the load phase', async () => {
-    const expected = [`${TypeOrmBindings.PREFIX}.SQLite`];
+    const expected = [`${TypeOrmBindings.PREFIX}.my-db`];
     await sandbox.copyFile(
-      resolve(__dirname, '../../fixtures/sqlite.connection.js'),
+      resolve(__dirname, '../fixtures/connections/sqlite.connection.js'),
     );
     const booterInst = new TypeOrmConnectionBooter(app, sandbox.path);
     const NUM_CONNECTIONS = 1; // 1 connection in above file.

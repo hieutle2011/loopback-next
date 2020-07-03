@@ -20,7 +20,6 @@ import {
   ModelBooter,
   RepositoryBooter,
   ServiceBooter,
-  TypeOrmConnectionBooter,
 } from './booters';
 import {Bootstrapper} from './bootstrapper';
 import {BootBindings} from './keys';
@@ -43,7 +42,6 @@ export class BootComponent implements Component {
     InterceptorProviderBooter,
     ModelApiBooter,
     ModelBooter,
-    TypeOrmConnectionBooter,
   ];
 
   /**

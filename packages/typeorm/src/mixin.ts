@@ -6,6 +6,9 @@
 import {
   Application,
   BindingScope,
+  Component,
+  config,
+  createBindingFromClass,
   inject,
   lifeCycleObserver,
   LifeCycleObserver,
@@ -13,6 +16,7 @@ import {
 } from '@loopback/core';
 import debugFactory from 'debug';
 import {ConnectionManager, ConnectionOptions} from 'typeorm';
+import {TypeOrmConnectionBooter} from './';
 import {TypeOrmBindings} from './keys';
 
 const debug = debugFactory('loopback:typeorm:mixin');
@@ -26,7 +30,7 @@ export function TypeOrmMixin<T extends MixinTarget<Application>>(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(...args: any[]) {
       super(...args);
-      this.lifeCycleObserver(TypeOrmLifeCycleManager);
+      this.component(TypeOrmComponent);
       this.connectionManager = new ConnectionManager();
       const binding = this.bind(TypeOrmBindings.MANAGER).to(
         this.connectionManager,
@@ -54,6 +58,16 @@ export function TypeOrmMixin<T extends MixinTarget<Application>>(
 export interface ApplicationUsingTypeOrm extends Application {
   connection(options: ConnectionOptions): void;
   migrateSchema(): Promise<void>;
+}
+
+export type TypeOrmComponentOptions = {
+  [prop: string]: string;
+};
+
+export class TypeOrmComponent implements Component {
+  bindings = [createBindingFromClass(TypeOrmConnectionBooter)];
+  lifeCycleObservers = [TypeOrmLifeCycleManager];
+  constructor(@config() private options: TypeOrmComponentOptions = {}) {}
 }
 
 @lifeCycleObserver('datasource', {

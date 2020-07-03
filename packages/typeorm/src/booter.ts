@@ -1,14 +1,17 @@
 // Copyright IBM Corp. 2020. All Rights Reserved.
-// Node module: @loopback/boot
+// Node module: @loopback/graphql
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
+import {
+  ArtifactOptions,
+  BaseArtifactBooter,
+  BootBindings,
+  booter,
+} from '@loopback/boot';
 import {config, CoreBindings, inject} from '@loopback/core';
-import {ApplicationUsingTypeOrm, ConnectionOptions} from '@loopback/typeorm';
 import debugFactory from 'debug';
-import {BootBindings} from '../keys';
-import {ArtifactOptions, booter} from '../types';
-import {BaseArtifactBooter} from './base-artifact.booter';
+import {ApplicationUsingTypeOrm, ConnectionOptions} from './';
 const debug = debugFactory('loopback:typeorm:mixin');
 
 /**
@@ -20,7 +23,7 @@ const debug = debugFactory('loopback:typeorm:mixin');
  * @param projectRoot - Root of user's project relative to which all paths are resolved
  * @param bootConfig - Connection artifact options object
  */
-@booter('datasources')
+@booter('connections')
 export class TypeOrmConnectionBooter extends BaseArtifactBooter {
   constructor(
     @inject(CoreBindings.APPLICATION_INSTANCE)

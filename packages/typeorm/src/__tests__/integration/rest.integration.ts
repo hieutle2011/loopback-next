@@ -4,14 +4,14 @@
 // License text available at https://opensource.org/licenses/MIT
 
 import {expect, TestSandbox} from '@loopback/testlab';
-import {TypeOrmBindings} from '@loopback/typeorm';
 import {resolve} from 'path';
-import {BooterApp} from '../fixtures/application';
+import {TypeOrmBindings} from '../../';
+import {TypeOrmApp} from '../fixtures/application';
 
-describe('TypeORM connection booter integration tests', () => {
+describe.skip('TypeORM (integration)', () => {
   const sandbox = new TestSandbox(resolve(__dirname, '../../.sandbox'));
 
-  let app: BooterApp;
+  let app: TypeOrmApp;
 
   beforeEach('reset sandbox', () => sandbox.reset());
   beforeEach(getApp);
@@ -26,10 +26,10 @@ describe('TypeORM connection booter integration tests', () => {
   async function getApp() {
     await sandbox.copyFile(resolve(__dirname, '../fixtures/application.js'));
     await sandbox.copyFile(
-      resolve(__dirname, '../fixtures/sqlite.connection.js'),
+      resolve(__dirname, '../fixtures/connections/sqlite.connection.js'),
       'connections/sqlite.connection.js',
     );
-    const MyApp = require(resolve(sandbox.path, 'application.js')).BooterApp;
+    const MyApp = require(resolve(sandbox.path, 'application.js')).TypeOrmApp;
     app = new MyApp();
   }
 });
