@@ -10,7 +10,7 @@ import {Book} from '../entities/book.entity';
 export class BookController {
   constructor() {}
 
-  @typeorm.repository(Book, 'SQLite') private bookRepo: Repository<Book>;
+  @typeorm.repository(Book, 'my-db') private bookRepo: Repository<Book>;
 
   @post('/books', {
     responses: {
