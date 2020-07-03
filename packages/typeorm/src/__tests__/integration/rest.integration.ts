@@ -8,7 +8,7 @@ import {resolve} from 'path';
 import {TypeOrmBindings} from '../../';
 import {TypeOrmApp} from '../fixtures/application';
 
-describe.skip('TypeORM (integration)', () => {
+describe.only('TypeORM (integration)', () => {
   const sandbox = new TestSandbox(resolve(__dirname, '../../.sandbox'));
 
   let app: TypeOrmApp;
@@ -17,7 +17,7 @@ describe.skip('TypeORM (integration)', () => {
   beforeEach(getApp);
 
   it('boots connections when app.boot() is called', async () => {
-    const expectedBindings = [`${TypeOrmBindings.PREFIX}.SQLite`];
+    const expectedBindings = [`${TypeOrmBindings.PREFIX}.my-db`];
     await app.boot();
     const bindings = app.findByTag(TypeOrmBindings.TAG).map(b => b.key);
     expect(bindings.sort()).to.eql(expectedBindings.sort());

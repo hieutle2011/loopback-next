@@ -5,7 +5,7 @@
 
 import {Context, inject, Injection, ResolutionSession} from '@loopback/core';
 import {QueryRunner} from 'typeorm';
-import {TypeOrmBindings} from './keys';
+import {TypeOrmBindings} from './typeorm.keys';
 
 export namespace typeorm {
   export function connection(connectionName?: string) {

@@ -19,7 +19,7 @@ describe('TypeORM connection booter integration tests', () => {
   it('boots connections when app.boot() is called', async () => {
     const expectedBindings = [`${TypeOrmBindings.PREFIX}.my-db`];
     await app.boot();
-    const bindings = await app.findByTag(TypeOrmBindings.TAG).map(b => b.key);
+    const bindings = app.findByTag(TypeOrmBindings.TAG).map(b => b.key);
     expect(bindings.sort()).to.eql(expectedBindings.sort());
   });
 

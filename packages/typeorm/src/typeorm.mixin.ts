@@ -17,7 +17,7 @@ import {
 import debugFactory from 'debug';
 import {ConnectionManager, ConnectionOptions} from 'typeorm';
 import {TypeOrmConnectionBooter} from './';
-import {TypeOrmBindings} from './keys';
+import {TypeOrmBindings} from './typeorm.keys';
 
 const debug = debugFactory('loopback:typeorm:mixin');
 
