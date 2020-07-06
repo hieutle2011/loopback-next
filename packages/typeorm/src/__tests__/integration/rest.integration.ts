@@ -3,7 +3,7 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
-import {get, post} from '@loopback/openapi-v3';
+import {RestApplication} from '@loopback/rest';
 import {
   Client,
   createRestAppClient,
@@ -28,41 +28,31 @@ describe.only('REST with TypeORM (integration)', () => {
       title: 'The Jungle',
       published: true,
     };
-    const res = await client.post('/hello').send(DATA);
-    //console.log(res);
+    let res;
+    res = await client.post('/books').send(DATA);
+    console.log(res.text);
+    console.log(res.body);
     expect(1);
   });
 
   async function getAppAndClient() {
     await sandbox.copyFile(resolve(__dirname, '../fixtures/application.js'));
     await sandbox.copyFile(
-      resolve(__dirname, '../fixtures/connections/sqlite.connection.js'),
+      resolve(__dirname, '../fixtures/sqlite.connection.js'),
       'connections/sqlite.connection.js',
     );
     await sandbox.copyFile(
-      resolve(__dirname, '../fixtures/entities/book.entity.js'),
+      resolve(__dirname, '../fixtures/book.entity.js'),
       'entities/book.entity.js',
     );
     await sandbox.copyFile(
-      resolve(__dirname, '../fixtures/controllers/book.controller.js'),
+      resolve(__dirname, '../fixtures/book.controller.js'),
       'controllers/book.controller.js',
     );
     const MyApp = require(resolve(sandbox.path, 'application.js')).TypeOrmApp;
     app = new MyApp();
-    app.controller(MyController);
     await app.start();
-    client = createRestAppClient(app);
+
+    client = createRestAppClient(app as RestApplication);
   }
 });
-
-class MyController {
-  @get('/hi')
-  greet() {
-    return 'Hi';
-  }
-
-  @post('/hello')
-  hello() {
-    return 'Hello';
-  }
-}

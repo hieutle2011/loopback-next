@@ -5,10 +5,14 @@
 
 import {BootMixin} from '@loopback/boot';
 import {ApplicationConfig} from '@loopback/core';
+import {RepositoryMixin} from '@loopback/repository';
 import {RestApplication} from '@loopback/rest';
+import {ServiceMixin} from '@loopback/service-proxy';
 import {TypeOrmMixin} from '../../';
 
-export class TypeOrmApp extends BootMixin(TypeOrmMixin(RestApplication)) {
+export class TypeOrmApp extends BootMixin(
+  ServiceMixin(RepositoryMixin(TypeOrmMixin(RestApplication))),
+) {
   constructor(options?: ApplicationConfig) {
     super(options);
     this.projectRoot = __dirname;

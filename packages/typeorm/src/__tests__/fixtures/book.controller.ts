@@ -4,8 +4,8 @@
 // License text available at https://opensource.org/licenses/MIT
 
 import {get, param, post, requestBody} from '@loopback/rest';
-import {getModelSchema, Repository, typeorm} from '../../../';
-import {Book} from '../entities/book.entity';
+import {getModelSchema, Repository, typeorm} from '../../';
+import {Book} from './book.entity';
 
 export class BookController {
   constructor() {}

@@ -23,6 +23,9 @@
       "path": "../rest/tsconfig.json"
     },
     {
+      "path": "../service-proxy/tsconfig.json"
+    },
+    {
       "path": "../testlab/tsconfig.json"
     }
   ]
